@@ -1,0 +1,47 @@
+{
+  "name": "playwright-ecommerce-e2e",
+  "version": "1.0.0",
+  "description": "Senior-level end-to-end test automation suite for an e-commerce web application, built with Playwright and TypeScript using the Page Object Model.",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui",
+    "test:chromium": "playwright test --project=chromium",
+    "test:firefox": "playwright test --project=firefox",
+    "test:webkit": "playwright test --project=webkit",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:regression": "playwright test --grep @regression",
+    "test:parallel": "playwright test --workers=4",
+    "report": "playwright show-report",
+    "codegen": "playwright codegen https://www.saucedemo.com",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "format": "prettier --write \"**/*.{ts,json,md}\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "playwright",
+    "typescript",
+    "e2e",
+    "automation",
+    "qa",
+    "pom",
+    "page-object-model"
+  ],
+  "author": "Fabiana Grisel Gonzalez",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.48.0",
+    "@types/node": "^22.7.0",
+    "@typescript-eslint/eslint-plugin": "^8.8.0",
+    "@typescript-eslint/parser": "^8.8.0",
+    "dotenv": "^16.4.5",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-playwright": "^1.6.2",
+    "prettier": "^3.3.3",
+    "typescript": "^5.6.2"
+  }
+}

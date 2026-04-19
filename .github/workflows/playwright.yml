@@ -1,0 +1,77 @@
+name: E2E Tests — Playwright
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  # Schedule a nightly run of the full regression suite.
+  # This catches the classic "third-party service broke overnight" issue
+  # before users notice it in the morning.
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+    inputs:
+      test_suite:
+        description: 'Which suite to run'
+        required: true
+        default: 'smoke'
+        type: choice
+        options:
+          - smoke
+          - regression
+          - all
+
+jobs:
+  test:
+    name: Playwright on ${{ matrix.browser }}
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    # Matrix strategy: run the same suite across three browsers in parallel.
+    # GitHub Actions launches three jobs simultaneously, cutting wall-clock time
+    # and giving us cross-browser coverage on every PR.
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+
+      - name: Type-check the codebase
+        run: npm run typecheck
+
+      - name: Run Playwright tests
+        run: npx playwright test --project=${{ matrix.browser }}
+        env:
+          CI: true
+          BASE_URL: ${{ vars.BASE_URL || 'https://www.saucedemo.com' }}
+
+      # Always upload the report, even if tests failed — that's the whole point.
+      - name: Upload HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ matrix.browser }}
+          path: playwright-report/
+          retention-days: 14
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.browser }}
+          path: test-results/
+          retention-days: 7
