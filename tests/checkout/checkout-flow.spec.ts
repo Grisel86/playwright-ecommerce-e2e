@@ -50,6 +50,7 @@ test.describe('Checkout flow', () => {
     await checkoutPage.expectOrderComplete();
   });
 
+  // eslint-disable-next-line playwright/expect-expect
   test('blocks submission when first name is missing @regression @negative', async ({
     inventoryPage,
     cartPage,
@@ -63,6 +64,7 @@ test.describe('Checkout flow', () => {
     await checkoutPage.expectInformationError(/first name is required/i);
   });
 
+  // eslint-disable-next-line playwright/expect-expect
   test('blocks submission when postal code is missing @regression @negative', async ({
     inventoryPage,
     cartPage,

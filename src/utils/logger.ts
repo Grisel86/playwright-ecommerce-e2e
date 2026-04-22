@@ -1,12 +1,4 @@
-/**
- * A very small logger wrapper.
- *
- * Why not just use console.log? Because senior QA engineers know that tests
- * produce a lot of noise, and in CI you want logs that are greppable, have
- * timestamps, and can be silenced via an env var when you just want the
- * report. This wrapper is tiny today but gives you a single place to plug in
- * something richer later (pino, winston, Allure steps, etc.).
- */
+
 export class Logger {
   private readonly context: string;
 

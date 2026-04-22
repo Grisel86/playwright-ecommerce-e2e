@@ -1,8 +1,4 @@
-/**
- * Product catalog and checkout data used across tests.
- * Keeping this in one place means if SauceDemo changes a product name or
- * price, we update it once and every test keeps passing.
- */
+
 
 export const products = {
   backpack: {

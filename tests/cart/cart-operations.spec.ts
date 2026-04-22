@@ -1,17 +1,12 @@
+/* eslint-disable playwright/expect-expect */
 import { authenticatedTest as test, expect } from '../../src/fixtures/auth.fixture';
 import { products } from '../../src/data/products';
 
-type InventoryTestArgs = {
-  inventoryPage: any;
-};
-
-type CartTestArgs = {
-  inventoryPage: any;
-  cartPage: any;
-};
+// Removed: manual InventoryTestArgs / CartTestArgs types with `any`.
+// The auth fixture already provides correct types for all page objects.
 
 test.describe('Shopping cart operations', () => {
-  test('adding a product updates the cart badge @smoke', async ({ inventoryPage }: InventoryTestArgs) => {
+  test('adding a product updates the cart badge @smoke', async ({ inventoryPage }) => {
     await inventoryPage.header.expectCartCount(0);
     await inventoryPage.addProductToCart(products.backpack.name);
     await inventoryPage.header.expectCartCount(1);
@@ -19,7 +14,7 @@ test.describe('Shopping cart operations', () => {
 
   test('adding multiple products accumulates the count @regression', async ({
     inventoryPage,
-  }: InventoryTestArgs) => {
+  }) => {
     await inventoryPage.addMultipleProductsToCart([
       products.backpack.name,
       products.bikeLight.name,
@@ -29,7 +24,10 @@ test.describe('Shopping cart operations', () => {
   });
 
   test('removing a product decrements the cart badge @regression', async ({ inventoryPage }) => {
-    await inventoryPage.addMultipleProductsToCart([products.backpack.name, products.bikeLight.name]);
+    await inventoryPage.addMultipleProductsToCart([
+      products.backpack.name,
+      products.bikeLight.name,
+    ]);
     await inventoryPage.header.expectCartCount(2);
 
     await inventoryPage.removeProductFromCart(products.backpack.name);
@@ -40,15 +38,15 @@ test.describe('Shopping cart operations', () => {
     inventoryPage,
     cartPage,
   }) => {
-    await inventoryPage.addMultipleProductsToCart([products.backpack.name, products.fleeceJacket.name]);
+    await inventoryPage.addMultipleProductsToCart([
+      products.backpack.name,
+      products.fleeceJacket.name,
+    ]);
     await inventoryPage.header.openCart();
 
     const items = await cartPage.getAllItems();
     expect(items).toHaveLength(2);
 
-    // Find the backpack in the returned items and assert its full domain shape.
-    // This kind of typed assertion is much more expressive than a pile of
-    // per-element DOM checks.
     const backpackInCart = items.find((item) => item.name === products.backpack.name);
     expect(backpackInCart).toBeDefined();
     expect(backpackInCart?.price).toBe(products.backpack.price);
