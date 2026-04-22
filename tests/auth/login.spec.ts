@@ -1,9 +1,10 @@
+/* eslint-disable playwright/expect-expect */
 import { test } from '../../src/fixtures/pages.fixture';
 import { users } from '../../src/data/users';
 
 test.describe('Authentication', () => {
   test.beforeEach(async ({ loginPage }) => {
-    await loginPage.goto(); // fixed: navigate() → goto()
+    await loginPage.goto();
     await loginPage.expectLoginFormVisible();
   });
 
@@ -51,10 +52,10 @@ test.describe('Authentication', () => {
   });
 
   const invalidCredentialsMatrix = [
-    { username: 'unknown_user',     password: 'secret_sauce', label: 'unknown username' },
-    { username: 'STANDARD_USER',    password: 'secret_sauce', label: 'username is case-sensitive' },
-    { username: 'standard_user',    password: 'SECRET_SAUCE', label: 'password is case-sensitive' },
-    { username: ' standard_user ',  password: 'secret_sauce', label: 'whitespace is not trimmed' },
+    { username: 'unknown_user',    password: 'secret_sauce', label: 'unknown username' },
+    { username: 'STANDARD_USER',   password: 'secret_sauce', label: 'username is case-sensitive' },
+    { username: 'standard_user',   password: 'SECRET_SAUCE', label: 'password is case-sensitive' },
+    { username: ' standard_user ', password: 'secret_sauce', label: 'whitespace is not trimmed' },
   ];
 
   for (const { username, password, label } of invalidCredentialsMatrix) {
