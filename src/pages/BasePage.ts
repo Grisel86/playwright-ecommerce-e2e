@@ -1,31 +1,10 @@
 import { Page, Locator, expect } from '@playwright/test';
 
-/**
- * BasePage is the abstract parent of every Page Object in the suite.
- *
- * The reason this class exists — and why senior-level frameworks always have one —
- * is that every page shares a handful of concerns: navigation, waiting for load,
- * taking context-aware screenshots, and exposing the underlying `page` for
- * advanced scenarios. Putting these in a base class keeps individual POMs small
- * and focused on what makes them unique (their locators and domain actions).
- *
- * Each subclass should:
- *   1. Receive the Playwright `page` via its constructor and pass it up with `super(page)`.
- *   2. Declare its own locators as `readonly` properties in the constructor.
- *   3. Expose domain-level methods (e.g. `login`, `addProductToCart`) rather than
- *      low-level click/type methods — tests should read like business scenarios,
- *      not DOM interactions.
- */
-export abstract class BasePage {
-  protected readonly page: Page;
 
-  // The URL path (relative to baseURL) that this page lives at.
-  // Subclasses override this so `goto()` knows where to navigate.
+export abstract class BasePage {
   protected abstract readonly url: string;
 
-  constructor(page: Page) {
-    this.page = page;
-  }
+  constructor(protected readonly page: Page) {}
 
   /**
    * Navigate to this page. Uses the baseURL from playwright.config.ts so the
@@ -42,7 +21,7 @@ export abstract class BasePage {
    * (analytics, tracking pixels) that never settle. Override in subclasses if the
    * page needs a more specific readiness signal.
    */
-  async waitForPageLoad(): Promise<void> {
+  protected async waitForPageLoad(): Promise<void> {
     await this.page.waitForLoadState('domcontentloaded');
   }
 
