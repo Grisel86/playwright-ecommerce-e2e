@@ -19,7 +19,7 @@
     "resolveJsonModule": true,
     "declaration": false,
     "sourceMap": true,
-    "ignoreDeprecations": "6.0",
+    "ignoreDeprecations": true,
     "baseUrl": ".",
     "paths": {
       "@pages/*": ["src/pages/*"],
